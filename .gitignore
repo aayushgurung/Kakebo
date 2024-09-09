@@ -36,6 +36,7 @@ frontend/*.ntvs*
 frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
+frontend/.env
 
 backend/.vscode/*
 backend!.vscode/extensions.json
@@ -46,3 +47,5 @@ backend/*.ntvs*
 backend/*.njsproj
 backend/*.sln
 backend/*.sw?
+backend/.env
+
