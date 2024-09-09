@@ -25,6 +25,7 @@ backend/node_modules
 backend/dist
 backend/dist-ssr
 backend/*.local
+backend/.env
 
 # Editor directories and files
 frontend/.vscode/*
@@ -47,5 +48,4 @@ backend/*.ntvs*
 backend/*.njsproj
 backend/*.sln
 backend/*.sw?
-backend/.env
 
