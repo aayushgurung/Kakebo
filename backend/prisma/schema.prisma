@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// prisma/schema.prisma
+
+model User {
+  id                 Int                 @id @default(autoincrement())
+  firstname          String?
+  lastname           String?
+  username           String              @unique
+  email              String              @unique
+  password           String
+  salt               String
+  createdAt          DateTime            @default(now())
+  transactions       Transaction[]
+  permanentCostItems PermanentCostItem[]
+  goalsAndIntentions GoalAndIntention[]
+  monthlySummaries   MonthlySummary[]
+  dailySpendings     DailySpending[]
+  budgetPeriods      BudgetPeriod[]
+}
+
+model Category {
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  transactions       Transaction[]
+  permanentCostItems PermanentCostItem[]
+  dailySpendings     DailySpending[]
+}
+
+model BudgetPeriod {
+  id                 Int                 @id @default(autoincrement())
+  userId             Int
+  periodType         String // 'weekly' or 'monthly'
+  startDate          DateTime
+  endDate            DateTime
+  disposalAmount     Float
+  user               User                @relation(fields: [userId], references: [id])
+  weekMonthTrackings WeekMonthTracking[]
+  transactions       Transaction[]
+}
+
+model WeekMonthTracking {
+  id           Int          @id @default(autoincrement())
+  budgetId     Int
+  weekNumber   Int
+  monthName    String
+  year         Int
+  budgetPeriod BudgetPeriod @relation(fields: [budgetId], references: [id])
+}
+
+model Transaction {
+  id           Int          @id @default(autoincrement())
+  userId       Int
+  categoryId   Int
+  amount       Float
+  date         DateTime
+  description  String?
+  type         String // e.g., income, expense
+  periodId     Int
+  user         User         @relation(fields: [userId], references: [id])
+  category     Category     @relation(fields: [categoryId], references: [id])
+  budgetPeriod BudgetPeriod @relation(fields: [periodId], references: [id])
+}
+
+model PermanentCostItem {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  categoryId Int
+  itemName   String
+  itemCost   Float
+  month      String
+  year       Int
+  user       User     @relation(fields: [userId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+}
+
+model GoalAndIntention {
+  id             Int     @id @default(autoincrement())
+  userId         Int
+  month          String
+  year           Int
+  goalType       String
+  amount         Float
+  description    String?
+  additionalInfo Json
+  user           User    @relation(fields: [userId], references: [id])
+}
+
+model MonthlySummary {
+  id            Int    @id @default(autoincrement())
+  userId        Int
+  month         String
+  year          Int
+  income        Float
+  totalExpenses Float
+  totalSavings  Float
+  disposable    Float
+  fixedCosts    Float
+  user          User   @relation(fields: [userId], references: [id])
+}
+
+model DailySpending {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  date        DateTime
+  dayOfWeek   String
+  categoryId  Int
+  amount      Float
+  description String?
+  user        User     @relation(fields: [userId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+}
