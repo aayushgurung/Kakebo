@@ -1,11 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { ITransactionData } from "../../types/financial.service";
 import { handleErrorService } from "../base.service";
-
-export async function createTransaction(
-  data: ITransactionData,
-  prisma: PrismaClient
-) {
+import { prisma } from "../base.service";
+export async function createTransaction(data: ITransactionData) {
   try {
     const transaction = await prisma.transaction.create({
       data,
@@ -16,7 +12,7 @@ export async function createTransaction(
   }
 }
 
-export async function getTransaction(id: number, prisma: PrismaClient) {
+export async function getTransaction(id: number) {
   try {
     const transaction = await prisma.transaction.findUnique({
       where: { id: id },
@@ -27,11 +23,7 @@ export async function getTransaction(id: number, prisma: PrismaClient) {
   }
 }
 
-export async function updateTransaction(
-  id: number,
-  data: ITransactionData,
-  prisma: PrismaClient
-) {
+export async function updateTransaction(id: number, data: ITransactionData) {
   try {
     const transaction = await prisma.transaction.update({
       where: { id: id },

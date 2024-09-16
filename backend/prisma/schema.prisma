@@ -109,6 +109,7 @@ model MonthlySummary {
   disposable           Float
   user                 User                @relation(fields: [user_id], references: [id])
   description          String
+  effective_start_date DateTime
   permanent_cost_items PermanentCostItem[]
 }
 

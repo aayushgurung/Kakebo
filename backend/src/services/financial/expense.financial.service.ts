@@ -8,8 +8,16 @@ import {
 } from "../../types/financial.service";
 import { createTransaction } from "./transaction.financial.service"; // Assuming transaction.financial.service also uses functions
 import { handleErrorService } from "../base.service";
+import {
+  DailySpending,
+  GoalAndIntention,
+  MonthlySummary,
+  PermanentCostItem,
+} from "@prisma/client";
 
-export async function addIncome(data: IMonthlySummary): Promise<void> {
+export async function addIncome(
+  data: IMonthlySummary
+): Promise<MonthlySummary | null> {
   try {
     const tranData: ITransactionData = {
       user_id: data.user_id,
@@ -19,7 +27,7 @@ export async function addIncome(data: IMonthlySummary): Promise<void> {
       is_recurring_flg: "Y",
     };
 
-    const transaction = await createTransaction(tranData, prisma);
+    const transaction = await createTransaction(tranData);
     if (!transaction) throw new Error("Transaction creation failed");
 
     const monthly = await prisma.monthlySummary.create({
@@ -35,14 +43,16 @@ export async function addIncome(data: IMonthlySummary): Promise<void> {
     });
 
     if (!monthly) throw new Error("Monthly summary creation failed");
+    return monthly;
   } catch (error) {
     handleErrorService(error);
+    return null;
   }
 }
 
 export async function addPermanentCostItems(
   data: IPermanentCostItem
-): Promise<void> {
+): Promise<PermanentCostItem | null> {
   try {
     const tranData: ITransactionData = {
       user_id: data.user_id,
@@ -52,7 +62,7 @@ export async function addPermanentCostItems(
       is_recurring_flg: "N",
     };
 
-    const transaction = await createTransaction(tranData, prisma);
+    const transaction = await createTransaction(tranData);
     if (!transaction) throw new Error("Transaction creation failed");
 
     const perma = await prisma.permanentCostItem.create({
@@ -66,14 +76,16 @@ export async function addPermanentCostItems(
     });
 
     if (!perma) throw new Error("Permanent cost item creation failed");
+    return perma;
   } catch (error) {
     handleErrorService(error);
+    return null;
   }
 }
 
 export async function addGoalAndIntentions(
   data: IGoalAndIntention
-): Promise<void> {
+): Promise<GoalAndIntention | null> {
   try {
     const tranData: ITransactionData = {
       user_id: data.user_id,
@@ -83,7 +95,7 @@ export async function addGoalAndIntentions(
       is_recurring_flg: "N",
     };
 
-    const transaction = await createTransaction(tranData, prisma);
+    const transaction = await createTransaction(tranData);
     if (!transaction) throw new Error("Transaction creation failed");
 
     const goal = await prisma.goalAndIntention.create({
@@ -98,11 +110,16 @@ export async function addGoalAndIntentions(
     });
 
     if (!goal) throw new Error("Goal and intention creation failed");
+    return goal;
   } catch (error) {
     handleErrorService(error);
+    return null;
   }
 }
-export async function addDailySpending(data: IDailySpending): Promise<void> {
+
+export async function addDailySpending(
+  data: IDailySpending
+): Promise<DailySpending | null> {
   try {
     const tranData: ITransactionData = {
       user_id: data.user_id,
@@ -112,10 +129,10 @@ export async function addDailySpending(data: IDailySpending): Promise<void> {
       is_recurring_flg: "Y",
     };
 
-    const transaction = await createTransaction(tranData, prisma);
+    const transaction = await createTransaction(tranData);
     if (!transaction) throw new Error("Transaction creation failed");
 
-    const goal = await prisma.dailySpending.create({
+    const spending = await prisma.dailySpending.create({
       data: {
         user_id: data.user_id,
         amount: data.amount,
@@ -125,8 +142,10 @@ export async function addDailySpending(data: IDailySpending): Promise<void> {
       },
     });
 
-    if (!goal) throw new Error("Goal and intention creation failed");
+    if (!spending) throw new Error("Daily spending creation failed");
+    return spending;
   } catch (error) {
     handleErrorService(error);
+    return null;
   }
 }
