@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kakebo Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header
+      class="bg-blue-600 text-white p-4 flex justify-between items-center"
+    >
+      <h1 class="text-3xl font-bold">Kakebo Dashboard</h1>
+      <button
+        class="bg-white text-blue-600 p-2 rounded shadow hover:bg-gray-200"
+      >
+        Input Daily Spending
+      </button>
+    </header>
+    <div class="container mx-auto p-6">
+      <!-- Monthly Overview Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Monthly Overview</h2>
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-lg"
+            >Showing Overview for: <strong>September 2024</strong></span
+          >
+          <div>
+            <label for="monthFilter" class="mr-2">Select Month:</label>
+            <select id="monthFilter" class="p-2 border rounded">
+              <option value="2024-09">September 2024</option>
+              <option value="2024-08">August 2024</option>
+              <option value="2024-07">July 2024</option>
+              <!-- Add more options as needed -->
+            </select>
+            <button class="bg-blue-600 text-white p-2 rounded">Filter</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Income</h3>
+            <p class="text-2xl font-bold">$3,500</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Total Expenses</h3>
+            <p class="text-2xl font-bold">$2,200</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Total Savings</h3>
+            <p class="text-2xl font-bold">$1,300</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Disposable Income</h3>
+            <p class="text-2xl font-bold">$500</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Daily Spending Tracker Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Daily Spending Tracker</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Today's Spending</h3>
+            <p class="text-2xl font-bold">$50</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Weekly Total</h3>
+            <p class="text-2xl font-bold">$300</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Top Spending Category</h3>
+            <p class="text-2xl font-bold">Groceries - $150</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Goal Tracking Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Goal Tracking</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">
+              Current Goal: Save for Vacation
+            </h3>
+            <div class="w-full bg-gray-200 rounded-full h-6 mb-4">
+              <div
+                class="bg-blue-600 h-6 rounded-full"
+                style="width: 60%"
+              ></div>
+            </div>
+            <p class="text-sm">60% of $1,000 goal</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Completed Goals</h3>
+            <ul class="list-disc ml-4">
+              <li>New Laptop - $1,200</li>
+              <li>Emergency Fund - $2,000</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Permanent Costs Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Permanent Costs</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Rent</h3>
+            <p class="text-2xl font-bold">$1,000</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold">Utilities</h3>
+            <p class="text-2xl font-bold">$200</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transactions Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Recent Transactions</h2>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+          <table class="w-full text-left">
+            <thead>
+              <tr>
+                <th class="pb-2">Date</th>
+                <th class="pb-2">Description</th>
+                <th class="pb-2">Amount</th>
+                <th class="pb-2">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="py-2">2024-09-28</td>
+                <td class="py-2">Groceries</td>
+                <td class="py-2">$50</td>
+                <td class="py-2">Expense</td>
+              </tr>
+              <tr>
+                <td class="py-2">2024-09-27</td>
+                <td class="py-2">Salary</td>
+                <td class="py-2">$2,500</td>
+                <td class="py-2">Income</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Budget Period Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Budget Period</h2>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold">Weekly Budget: $500</h3>
+          <div class="w-full bg-gray-200 rounded-full h-6 mb-4">
+            <div class="bg-green-600 h-6 rounded-full" style="width: 60%"></div>
+          </div>
+          <p class="text-sm">Spent: $300 / $500</p>
+        </div>
+      </section>
+
+      <!-- Savings Insights Section -->
+      <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Savings Insights</h2>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold">Year-to-Date Savings</h3>
+          <p class="text-2xl font-bold">$5,500</p>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

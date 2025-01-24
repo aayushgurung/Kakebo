@@ -16,3 +16,29 @@ app.listen(port, () => {
   logger.info(`[server]: Server is running at http://localost:${port}`);
   logger.debug(`[server]: Server is running at http://localost:${port}`);
 });
+
+function summaryRanges(nums: number[]): string[] {
+  let i = 0;
+  let temp: number[] = [];
+  let nt = true;
+  let range: string[] = [];
+  while (i < nums.length) {
+    temp.push(nums[i]);
+    while (nt) {
+      console.log(nums[i]);
+      if (nums[i] + 1 != nums[i + 1]) {
+        temp.push(nums[i]);
+        nt = false;
+      }
+      i++;
+    }
+    nt = true;
+    if (temp[0] != temp[1]) range.push(`${temp[0]}->${temp[1]}`);
+    else range.push(`${temp[0]}`);
+
+    temp = [];
+  }
+  return range;
+}
+
+summaryRanges([0, 1, 2, 4, 5, 7]);

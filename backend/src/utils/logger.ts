@@ -17,7 +17,9 @@ const messageColors = {
   debug: "gray",
   http: "magenta",
 };
+
 type levels = "info" | "debug" | "error" | "warn" | "http";
+
 winston.addColors(messageColors);
 
 const messageColorizer = format((info) => {
@@ -28,25 +30,34 @@ const messageColorizer = format((info) => {
   return info;
 });
 
+// Function to get file name and line number
+const getCallerInfo = () => {
+  const stack = new Error().stack;
+  const stackArray = stack?.split("\n");
+  const callerLine = stackArray ? stackArray[3] : ""; // Adjust the index if needed
+  const match = callerLine.match(/\((.*):(\d+):(\d+)\)/);
+  return match ? `at ${match[1]}:${match[2]}` : ""; // Returns the file path and line number
+};
+
 const consoleFormat = format.combine(
   format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   messageColorizer(),
-  format.printf(
-    ({ timestamp, level, message, ...meta }) =>
-      `${timestamp} [${level}]: ${message} ${
-        Object.keys(meta).length ? JSON.stringify(meta) : ""
-      }`
-  )
+  format.printf(({ timestamp, level, message, ...meta }) => {
+    const callerInfo = getCallerInfo(); // Get the file path and line number
+    return `${timestamp} [${level}]: ${message} ${callerInfo} ${
+      Object.keys(meta).length ? JSON.stringify(meta) : ""
+    }`;
+  })
 );
 
 const fileFormat = format.combine(
   format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-  format.printf(
-    ({ timestamp, level, message, ...meta }) =>
-      `${timestamp} [${level}]: ${message} ${
-        Object.keys(meta).length ? JSON.stringify(meta) : ""
-      }`
-  )
+  format.printf(({ timestamp, level, message, ...meta }) => {
+    const callerInfo = getCallerInfo(); // Get the file path and line number
+    return `${timestamp} [${level}]: ${message} ${callerInfo} ${
+      Object.keys(meta).length ? JSON.stringify(meta) : ""
+    }`;
+  })
 );
 
 const dailyRotateFileTransport = new DailyRotateFile({
@@ -71,6 +82,7 @@ export const logger = winston.createLogger({
   exitOnError: false,
 });
 
+// Handle unhandled promise rejections
 process.on("unhandledRejection", (reason) => {
   logger.error("Unhandled Rejection", { reason });
 });

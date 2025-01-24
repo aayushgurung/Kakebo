@@ -13,7 +13,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
     await register(req.body);
 
-    logger.info(`User ${req.body.username} created successfully`);
+    logger.error(`User ${req.body.username} created successfully`);
     return res.status(200).json({ message: "User created successfully" });
   } catch (error) {
     if (error instanceof Error)
