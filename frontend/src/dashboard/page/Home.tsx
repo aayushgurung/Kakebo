@@ -3,20 +3,16 @@ import {
   ChevronRight,
   CircleDollarSign,
   CreditCard,
+  Eye,
+  EyeClosed,
+  EyeOff,
   PiggyBank,
   Receipt,
 } from "lucide-react";
 ("use client");
 
 import { TrendingUp } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   Table,
   TableBody,
@@ -44,6 +40,7 @@ import {
 } from "@/components/ui/chart";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 const chartData = [
   { month: "January", income: 186, expense: 80 },
   { month: "February", income: 305, expense: 200 },
@@ -166,20 +163,66 @@ const transactionHistory = [
 ];
 
 const Home = () => {
+  const [isDataVisible, setIsDataVisible] = useState<boolean>(true);
+
+  useEffect(() => {
+    const savedState = localStorage.getItem("dataVisibility");
+    if (savedState !== null) {
+      setIsDataVisible(JSON.parse(savedState));
+    }
+  }, []);
+
+  const handleHideToggle = () => {
+    const newState = !isDataVisible; // Toggle the boolean state
+    setIsDataVisible(newState); // Update state
+
+    // Save the new state in localStorage
+    localStorage.setItem("dataVisibility", JSON.stringify(newState));
+    console.log("New state:", typeof localStorage.getItem("datavisibility"));
+  };
   return (
     <>
       <div className="flex gap-6 flex-col">
-        <div className="flex text-base">
+        <div className="flex text-base justify-between xl:justify-normal">
           <div className="text-black80">
             Welcome to Kakebo Finance Management.
+          </div>
+          <div className="ps-5">
+            <button className="p-0 m-0" onClick={handleHideToggle}>
+              {isDataVisible ? (
+                <Eye strokeWidth={1.5} className="text-second30" />
+              ) : (
+                <EyeOff strokeWidth={1.5} className="text-second30" />
+              )}
+            </button>
           </div>
         </div>
         {/* Section 1 */}
         <div className="flex gap-6 lg:flex-row flex-col">
-          <Tile amount={50000} title="INCOME" icon={CircleDollarSign} />
-          <Tile amount={3000} title="EXPENSE" icon={Receipt} />
-          <Tile amount={2000} title="SAVING GOAL" icon={PiggyBank} />
-          <Tile amount={7000} title="REMAINING BUDGET" icon={CreditCard} />
+          <Tile
+            amount={50000}
+            title="INCOME"
+            isDataVisible={isDataVisible}
+            icon={CircleDollarSign}
+          />
+          <Tile
+            amount={3000}
+            title="EXPENSE"
+            isDataVisible={isDataVisible}
+            icon={Receipt}
+          />
+          <Tile
+            amount={2000}
+            title="SAVING GOAL"
+            isDataVisible={isDataVisible}
+            icon={PiggyBank}
+          />
+          <Tile
+            amount={7000}
+            title="REMAINING BUDGET"
+            isDataVisible={isDataVisible}
+            icon={CreditCard}
+          />
         </div>
         {/* Section 2 */}
         <div className="flex gap-6 lg:flex-row flex-col">
@@ -198,7 +241,13 @@ const Home = () => {
                   config={chartConfig}
                   className="max-h-[230px] min-h-[200px] w-full"
                 >
-                  <BarChart accessibilityLayer data={chartData}>
+                  <BarChart
+                    accessibilityLayer
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                    }}
+                  >
                     <CartesianGrid vertical={false} />
                     <XAxis
                       dataKey="month"
@@ -216,11 +265,32 @@ const Home = () => {
                       fill="var(--color-income)"
                       radius={4}
                       height={1}
-                    />
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Bar>
+
                     <Bar
                       dataKey="expense"
                       fill="var(--color-expense)"
                       radius={4}
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Bar>
+                    <LabelList
+                      position="top"
+                      offset={12}
+                      className="fill-foreground"
+                      fontSize={12}
                     />
                   </BarChart>
                 </ChartContainer>

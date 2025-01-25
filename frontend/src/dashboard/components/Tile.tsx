@@ -6,6 +6,7 @@ type TileProps = {
   amount?: number;
   className?: string;
   children?: React.ReactNode;
+  isDataVisible?: boolean;
 };
 
 const Tile: React.FC<TileProps> = ({
@@ -14,6 +15,7 @@ const Tile: React.FC<TileProps> = ({
   amount,
   className,
   children,
+  isDataVisible,
 }) => {
   return (
     <div
@@ -34,11 +36,13 @@ const Tile: React.FC<TileProps> = ({
           <div>
             {title && (
               <div className="text-black80 font-semibold text-body-sm">
-                {title}
+                {isDataVisible ? title : "****"}
               </div>
             )}
             {amount !== undefined && (
-              <div className="text-heading-3 text-black100">${amount}</div>
+              <div className="text-heading-3 text-black100">
+                ${isDataVisible ? amount : "****"}
+              </div>
             )}
           </div>
         </>
