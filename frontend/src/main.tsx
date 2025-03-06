@@ -6,7 +6,7 @@ import DashboardLayout from "./dashboard/DashboardLayout.tsx";
 import NotFound from "./components/ErrorElement.tsx";
 import "./index.css";
 import Budget from "./dashboard/page/Budget.tsx";
-
+import { Toaster } from "@/components/ui/toaster";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,5 +32,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
+    <Toaster />
   </StrictMode>
 );

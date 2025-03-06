@@ -16,74 +16,57 @@ datasource db {
 // prisma/schema.prisma
 
 model User {
-  id                   Int                 @id @default(autoincrement())
+  id                   Int                @id @default(autoincrement())
   firstname            String?
   lastname             String?
-  username             String              @unique
-  email                String              @unique
+  username             String             @unique
+  email                String             @unique
   password             String
   salt                 String
-  created_at           DateTime            @default(now())
-  is_del_flg           String              @default("N")
-  is_active_flg        String              @default("Y")
+  created_at           DateTime           @default(now())
+  is_del_flg           String             @default("N")
+  is_active_flg        String             @default("Y")
   transactions         Transaction[]
-  permanent_cost_items PermanentCostItem[]
+  fixed_cost_items     FixedCostItem[]
   goals_and_intentions GoalAndIntention[]
-  monthly_summaries    MonthlySummary[]
-  daily_spendings      DailySpending[]
-  budget_periods       BudgetPeriod[]
+  incomes              Income[]
+  expenses             Expense[]
 }
 
 model Category {
-  id                   Int                 @id @default(autoincrement())
-  name                 String
-  is_active_flg        String              @default("N")
-  permanent_cost_items PermanentCostItem[]
-  daily_spendings      DailySpending[]
-}
-
-model BudgetPeriod {
-  id                   Int                 @id @default(autoincrement())
-  user_id              Int
-  period_type          String // 'weekly' or 'monthly'
-  start_date           DateTime
-  end_date             DateTime
-  disposal_amount      Float
-  user                 User                @relation(fields: [user_id], references: [id])
-  week_month_trackings WeekMonthTracking[]
-}
-
-model WeekMonthTracking {
-  id            Int          @id @default(autoincrement())
-  budget_id     Int
-  week_number   Int
-  month_name    String
-  year          Int
-  budget_period BudgetPeriod @relation(fields: [budget_id], references: [id])
+  id               Int             @id @default(autoincrement())
+  name             String
+  type             String
+  is_active_flg    String          @default("N")
+  transactions     Transaction[]
+  fixed_cost_items FixedCostItem[]
+  expenses         Expense[]
 }
 
 model Transaction {
   id               Int      @id @default(autoincrement())
   user_id          Int
+  category_id      Int
   amount           Float
   date             DateTime @default(now())
   description      String?
-  type             String // e.g., income, expense
+  type             String?
   is_recurring_flg String   @default("N")
   user             User     @relation(fields: [user_id], references: [id])
+  category         Category @relation(fields: [category_id], references: [id])
 }
 
-model PermanentCostItem {
-  id                 Int            @id @default(autoincrement())
-  user_id            Int
-  category_id        Int
-  item_name          String
-  item_cost          Float
-  date               DateTime       @default(now())
-  user               User           @relation(fields: [user_id], references: [id])
-  category           Category       @relation(fields: [category_id], references: [id])
-  monthly_summary    MonthlySummary @relation(fields: [monthly_summary_id], references: [id])
-  monthly_summary_id Int
+model FixedCostItem {
+  id              Int      @id @default(autoincrement())
+  user_id         Int
+  category_id     Int
+  item_name       String
+  item_cost       Float
+  date            DateTime @default(now())
+  user            User     @relation(fields: [user_id], references: [id])
+  category        Category @relation(fields: [category_id], references: [id])
+  monthly_summary Income   @relation(fields: [income_id], references: [id])
+  income_id       Int
 }
 
 model GoalAndIntention {
@@ -98,26 +81,22 @@ model GoalAndIntention {
   user            User     @relation(fields: [user_id], references: [id])
 }
 
-model MonthlySummary {
-  id                   Int                 @id @default(autoincrement())
-  user_id              Int
-  date                 DateTime            @default(now())
-  income               Float
-  total_expenses       Float?
-  total_savings        Float?
-  fixed_costs          Float
-  disposable           Float
-  user                 User                @relation(fields: [user_id], references: [id])
-  description          String
-  effective_start_date DateTime
-  permanent_cost_items PermanentCostItem[]
+model Income {
+  id               Int             @id @default(autoincrement())
+  user_id          Int
+  date             DateTime        @default(now())
+  income           Float
+  category         String
+  user             User            @relation(fields: [user_id], references: [id])
+  description      String
+  fixed_cost_items FixedCostItem[]
 }
 
-model DailySpending {
+model Expense {
   id          Int      @id @default(autoincrement())
   user_id     Int
   date        DateTime @default(now())
-  day_of_week String
+  day         String
   category_id Int
   amount      Float
   description String?
