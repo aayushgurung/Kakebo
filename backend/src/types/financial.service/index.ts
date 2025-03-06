@@ -6,6 +6,16 @@ export type ITransactionData = {
   description: string | null;
   type: string;
   is_recurring_flg: string;
+  category_id: number;
+};
+
+export type IIncomeData = {
+  user_id: number;
+  income: number;
+  description: string;
+  is_del_flg?: string;
+  category_id: number;
+  date: Date;
 };
 
 export type IGoalAndIntention = {

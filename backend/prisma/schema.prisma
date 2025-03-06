@@ -15,35 +15,36 @@ datasource db {
 
 // prisma/schema.prisma
 
-model User {
+model user {
   id                   Int                @id @default(autoincrement())
   firstname            String?
   lastname             String?
-  username             String             @unique
+  username             String?            @unique
   email                String             @unique
   password             String
   salt                 String
   created_at           DateTime           @default(now())
   is_del_flg           String             @default("N")
   is_active_flg        String             @default("Y")
-  transactions         Transaction[]
-  fixed_cost_items     FixedCostItem[]
-  goals_and_intentions GoalAndIntention[]
-  incomes              Income[]
+  transactions         transaction[]
+  fixed_cost_items     fixedCostItem[]
+  goals_and_intentions goalAndIntention[]
+  incomes              income[]
   expenses             Expense[]
 }
 
-model Category {
+model category {
   id               Int             @id @default(autoincrement())
   name             String
   type             String
   is_active_flg    String          @default("N")
-  transactions     Transaction[]
-  fixed_cost_items FixedCostItem[]
+  transactions     transaction[]
+  fixed_cost_items fixedCostItem[]
   expenses         Expense[]
+  Income           income[]
 }
 
-model Transaction {
+model transaction {
   id               Int      @id @default(autoincrement())
   user_id          Int
   category_id      Int
@@ -52,24 +53,24 @@ model Transaction {
   description      String?
   type             String?
   is_recurring_flg String   @default("N")
-  user             User     @relation(fields: [user_id], references: [id])
-  category         Category @relation(fields: [category_id], references: [id])
+  user             user     @relation(fields: [user_id], references: [id])
+  category         category @relation(fields: [category_id], references: [id])
 }
 
-model FixedCostItem {
+model fixedCostItem {
   id              Int      @id @default(autoincrement())
   user_id         Int
   category_id     Int
   item_name       String
   item_cost       Float
   date            DateTime @default(now())
-  user            User     @relation(fields: [user_id], references: [id])
-  category        Category @relation(fields: [category_id], references: [id])
-  monthly_summary Income   @relation(fields: [income_id], references: [id])
+  user            user     @relation(fields: [user_id], references: [id])
+  category        category @relation(fields: [category_id], references: [id])
+  monthly_summary income   @relation(fields: [income_id], references: [id])
   income_id       Int
 }
 
-model GoalAndIntention {
+model goalAndIntention {
   id              Int      @id @default(autoincrement())
   user_id         Int
   date            DateTime @default(now())
@@ -78,29 +79,30 @@ model GoalAndIntention {
   description     String?
   additional_info Json?
   is_achieved_flg String   @default("N")
-  user            User     @relation(fields: [user_id], references: [id])
+  user            user     @relation(fields: [user_id], references: [id])
 }
 
-model Income {
+model income {
   id               Int             @id @default(autoincrement())
+  category_id      Int
   user_id          Int
   date             DateTime        @default(now())
   income           Float
-  category         String
-  user             User            @relation(fields: [user_id], references: [id])
+  category         category        @relation(fields: [category_id], references: [id])
+  user             user            @relation(fields: [user_id], references: [id])
   description      String
-  fixed_cost_items FixedCostItem[]
+  fixed_cost_items fixedCostItem[]
+  is_del_flg       String          @default("N")
 }
 
 model Expense {
   id          Int      @id @default(autoincrement())
   user_id     Int
   date        DateTime @default(now())
-  day         String
   category_id Int
   amount      Float
   description String?
   is_del_flg  String   @default("N")
-  user        User     @relation(fields: [user_id], references: [id])
-  category    Category @relation(fields: [category_id], references: [id])
+  user        user     @relation(fields: [user_id], references: [id])
+  category    category @relation(fields: [category_id], references: [id])
 }

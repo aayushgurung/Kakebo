@@ -68,10 +68,10 @@ CREATE TABLE "GoalAndIntention" (
 -- CreateTable
 CREATE TABLE "Income" (
     "id" SERIAL NOT NULL,
+    "category_id" INTEGER NOT NULL,
     "user_id" INTEGER NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "income" DOUBLE PRECISION NOT NULL,
-    "category" TEXT NOT NULL,
     "description" TEXT NOT NULL,
 
     CONSTRAINT "Income_pkey" PRIMARY KEY ("id")
@@ -114,6 +114,9 @@ ALTER TABLE "FixedCostItem" ADD CONSTRAINT "FixedCostItem_income_id_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "GoalAndIntention" ADD CONSTRAINT "GoalAndIntention_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Income" ADD CONSTRAINT "Income_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Income" ADD CONSTRAINT "Income_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
